@@ -11,7 +11,7 @@ public class TesteConexao {
     public static void main(String[] args) {
         Conexao conexao = new Conexao();
 
-        try {
+        try {   
             Connection connection = conexao.getConnection();
             System.out.println("Conexão estabelecida com sucesso!");
             connection.close(); 

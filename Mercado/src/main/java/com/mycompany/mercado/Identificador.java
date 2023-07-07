@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -104,13 +103,14 @@ public class Identificador extends javax.swing.JFrame {
 
     public void identificar() {
         try (Connection conexao = new Conexao().getConnection()) {
-            PreparedStatement statement = conexao.prepareStatement("SELECT num_funcionario, nome FROM funcionarios");
+            PreparedStatement statement = conexao.prepareStatement("SELECT id_funcionario, id_funcao FROM funcionarios");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                String id = resultSet.getString("num_funcionario");
-                String nome = resultSet.getString("nome");
-                if (bxEmployee.getText().equals(id)) {
+                String id = resultSet.getString("id_funcionario");
+                String funcao = resultSet.getString("id_funcao");
+                if (bxEmployee.getText().equals(id) && "1".equals(funcao)) {
                     MenuFuncionarioComum.getMenuFuncionarioComum().setVisible(true);
+                    dispose();
                 }
             }
 
