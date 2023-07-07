@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class Conexao {
     public Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/mercado";
+        String url = "jdbc:mysql://root:Vlat1huPICHWWWNlFxGI@containers-us-west-196.railway.app:5583/mercado";
         String u = "root";
-        String p = "12345678";
+        String p = "Vlat1huPICHWWWNlFxGI";
         Connection conexao = DriverManager.getConnection(url, u, p);
         return conexao;
     }
