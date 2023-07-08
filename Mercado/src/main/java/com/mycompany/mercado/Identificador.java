@@ -23,8 +23,6 @@ public class Identificador extends javax.swing.JFrame {
     public Identificador() {
         initComponents();
         setLocationRelativeTo(null);
-        BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-        setIconImage(image);
         getContentPane().setBackground(Color.WHITE);
     }
 
@@ -103,13 +101,12 @@ public class Identificador extends javax.swing.JFrame {
 
     public void identificar() {
         try (Connection conexao = new Conexao().getConnection()) {
-            PreparedStatement statement = conexao.prepareStatement("SELECT id_funcionario, id_funcao FROM funcionarios");
+            PreparedStatement statement = conexao.prepareStatement("SELECT id_funcionario FROM funcionarios");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String id = resultSet.getString("id_funcionario");
-                String funcao = resultSet.getString("id_funcao");
-                if (bxEmployee.getText().equals(id) && "1".equals(funcao)) {
-                    MenuFuncionarioComum.getMenuFuncionarioComum().setVisible(true);
+                if (bxEmployee.getText().equals(id)) {
+                    MenuFuncionario.getMenuFuncionarioComum().setVisible(true);
                     dispose();
                 }
             }
