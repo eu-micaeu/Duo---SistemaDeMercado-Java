@@ -4,7 +4,11 @@
  */
 package com.mycompany.mercado;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Color;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,7 +58,9 @@ public class MenuFuncionario extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
-        
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
@@ -169,8 +175,13 @@ public class MenuFuncionario extends javax.swing.JFrame {
     private void btFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFinalizarActionPerformed
         finalizar();
         mostrar();
+        Impressao.getImpressao().setVisible(true);
+        
     }//GEN-LAST:event_btFinalizarActionPerformed
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {                                   
+    }
+    
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         finalizar();
     }//GEN-LAST:event_formWindowClosing
@@ -181,6 +192,8 @@ public class MenuFuncionario extends javax.swing.JFrame {
             PreparedStatement statement = conexao.prepareStatement(query);
             statement.executeUpdate();
             conexao.close();
+            bxCodigo.setText("");
+            bxQuantidade.setText("");
         } catch (SQLException e) {
             System.out.println("ERRO NO SQL! - adiconar");
         }
@@ -208,15 +221,27 @@ public class MenuFuncionario extends javax.swing.JFrame {
         }
     }
     
-    public void finalizar(){
+    public void finalizar(){Document document = new Document();
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream("nota_fiscal.pdf"));
+            document.open();
+            document.add(new Paragraph("Conteúdo da nota fiscal"));
+            document.close();
+            System.out.println("Arquivo PDF criado com sucesso.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         try (Connection conexao = new Conexao().getConnection()) {
             String query = "TRUNCATE TABLE compra;";
             PreparedStatement statement = conexao.prepareStatement(query);
             statement.executeUpdate();
             conexao.close();
+            bxTotal.setText("");
         } catch (SQLException e) {
             System.out.println("ERRO NO SQL! - finalizar");
         }
+        
     }
     
     /**
