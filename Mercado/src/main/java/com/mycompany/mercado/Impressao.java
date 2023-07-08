@@ -102,8 +102,7 @@ public class Impressao extends javax.swing.JFrame {
 
     private void btVisualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btVisualizarActionPerformed
         try {
-        String caminhoArquivo = "nota_fiscal.pdf";
-        
+        String caminhoArquivo = "NFC.pdf";
         File arquivo = new File(caminhoArquivo);
         Desktop.getDesktop().open(arquivo);
     } catch (IOException e) {

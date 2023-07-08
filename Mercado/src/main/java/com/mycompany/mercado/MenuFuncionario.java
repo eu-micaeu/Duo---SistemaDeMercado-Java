@@ -5,6 +5,7 @@
 package com.mycompany.mercado;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Color;
@@ -14,6 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
  * @author micae
  */
 public class MenuFuncionario extends javax.swing.JFrame {
+
     private static MenuFuncionario menuFuncionarioComum;
 
     public MenuFuncionario() {
@@ -28,14 +32,14 @@ public class MenuFuncionario extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(Color.WHITE);
     }
-    
+
     public static MenuFuncionario getMenuFuncionarioComum() {
-    if (menuFuncionarioComum == null) {
-        menuFuncionarioComum = new MenuFuncionario();
+        if (menuFuncionarioComum == null) {
+            menuFuncionarioComum = new MenuFuncionario();
+        }
+        return menuFuncionarioComum;
     }
-    return menuFuncionarioComum;
-    }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -115,28 +119,26 @@ public class MenuFuncionario extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bxCodigo))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btAdicionar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btFinalizar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(bxCodigo))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(btAdicionar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btFinalizar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(bxQuantidade, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(600, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bxTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(bxTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(bxQuantidade)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -176,17 +178,17 @@ public class MenuFuncionario extends javax.swing.JFrame {
         finalizar();
         mostrar();
         Impressao.getImpressao().setVisible(true);
-        
+
     }//GEN-LAST:event_btFinalizarActionPerformed
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {                                   
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {
     }
-    
+
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         finalizar();
     }//GEN-LAST:event_formWindowClosing
-    
-    public void  adicionar(){
+
+    public void adicionar() {
         try (Connection conexao = new Conexao().getConnection()) {
             String query = String.format("INSERT INTO compra(id_produto, quantidade) VALUES (%s, %s)", bxCodigo.getText(), bxQuantidade.getText());
             PreparedStatement statement = conexao.prepareStatement(query);
@@ -198,10 +200,10 @@ public class MenuFuncionario extends javax.swing.JFrame {
             System.out.println("ERRO NO SQL! - adiconar");
         }
     }
-    
-    public void mostrar(){
+
+    public void mostrar() {
         DefaultTableModel tabModel = (DefaultTableModel) tabProduto.getModel();
-        tabModel.setRowCount(0); 
+        tabModel.setRowCount(0);
         double vt_produto = 0;
         try (Connection conexao = new Conexao().getConnection()) {
             String query = "SELECT c.id_produto, p.nome, p.valor, c.quantidade FROM compra c, produto p WHERE c.id_produto = p.id_produto";
@@ -220,18 +222,35 @@ public class MenuFuncionario extends javax.swing.JFrame {
             System.out.println("ERRO NO SQL! - mostrar");
         }
     }
-    
-    public void finalizar(){Document document = new Document();
-        try {
-            PdfWriter.getInstance(document, new FileOutputStream("nota_fiscal.pdf"));
-            document.open();
-            document.add(new Paragraph("Conteúdo da nota fiscal"));
+
+    public void finalizar() {
+        Document document = new Document();
+        try (Connection conexao = new Conexao().getConnection()) {
+            String query = "SELECT c.id_produto, p.nome, p.valor, c.quantidade FROM compra c, produto p WHERE c.id_produto = p.id_produto";
+            Statement statement = conexao.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            try {
+                PdfWriter.getInstance(document, new FileOutputStream("NFC.pdf"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id_produto");
+                String nome = resultSet.getString("nome");
+                float valor = resultSet.getFloat("valor");
+                int quantidade = resultSet.getInt("quantidade");
+                document.open();
+                document.add(new Paragraph(id + " - " + nome + " - " + valor + " - " + quantidade));
+                
+                System.out.println("Arquivo PDF criado com sucesso.");
+            }
             document.close();
-            System.out.println("Arquivo PDF criado com sucesso.");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("ERRO NO SQL! - finalizar");
+        } catch (DocumentException ex) {
+            System.out.println("ERRO NO DOCUMENTO! - finalizar");
         }
-        
+
         try (Connection conexao = new Conexao().getConnection()) {
             String query = "TRUNCATE TABLE compra;";
             PreparedStatement statement = conexao.prepareStatement(query);
@@ -241,9 +260,9 @@ public class MenuFuncionario extends javax.swing.JFrame {
         } catch (SQLException e) {
             System.out.println("ERRO NO SQL! - finalizar");
         }
-        
+
     }
-    
+
     /**
      * @param args the command line arguments
      */
