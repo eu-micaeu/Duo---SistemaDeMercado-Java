@@ -1,0 +1,64 @@
+
+USE mercado;
+
+CREATE TABLE produto (
+    id_produto INT AUTO_INCREMENT,
+    nome VARCHAR(70),
+    valor DECIMAL(8, 2),
+    estoque INT,
+    PRIMARY KEY (id_produto)
+);
+
+
+
+CREATE TABLE compra(
+	id_compra INT auto_increment,
+	id_produto INT ,
+    quantidade INT,
+    PRIMARY KEY (id_compra),
+	FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
+);
+
+insert into produto (nome,valor,estoque) 
+values ('Barra de chocolate - NESTLE', 12.45, 15);
+
+insert into produto (nome,valor,estoque) 
+values ('Biscoito - BAUDUCO', 5.25, 50);
+
+insert into produto (nome,valor,estoque) 
+values ('Feijão carioca',4.77, 13);
+
+insert into produto (nome,valor,estoque) 
+values ('Arroz integral',3.95, 20);
+
+insert into produto (nome,valor,estoque) 
+values ('Café Solúvel Descafeinado', 7.80, 15);
+
+insert into produto (nome,valor,estoque) 
+values ('Cappuccino 3 corações', 15.70, 20);
+
+insert into produto (nome,valor,estoque) 
+values ('Feijão carioca',4.77, 13);
+
+insert into produto (nome, valor, estoque)
+values ('Macarrão espaguete', 2.50, 15);
+
+insert into produto (nome, valor, estoque)
+values ('Leite integral', 2.99, 30);
+
+insert into produto (nome, valor, estoque)
+values ('Óleo de soja', 3.20, 25);
+
+insert into produto (nome, valor, estoque)
+values ('Açúcar refinado', 2.75, 18);
+
+insert into produto (nome, valor, estoque)
+values ('Sal refinado', 1.50, 40);
+
+insert into produto (nome, valor, estoque)
+values ('Café em pó', 5.60, 10);
+
+insert into produto (nome, valor, estoque)
+values ('Farinha de trigo', 2.30, 22);
+
+
