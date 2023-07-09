@@ -101,7 +101,7 @@ public class Identificador extends javax.swing.JFrame {
 
     public void identificar() {
         try (Connection conexao = new Conexao().getConnection()) {
-            PreparedStatement statement = conexao.prepareStatement("SELECT id_funcionario FROM funcionarios");
+            PreparedStatement statement = conexao.prepareStatement("SELECT id_funcionario FROM funcionario");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String id = resultSet.getString("id_funcionario");

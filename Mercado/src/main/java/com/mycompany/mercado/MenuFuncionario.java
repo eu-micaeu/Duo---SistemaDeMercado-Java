@@ -11,12 +11,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.io.FileOutputStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,6 +28,7 @@ public class MenuFuncionario extends javax.swing.JFrame {
 
     public MenuFuncionario() {
         initComponents();
+        mostrar();
         setLocationRelativeTo(null);
         getContentPane().setBackground(Color.WHITE);
     }
@@ -59,8 +59,11 @@ public class MenuFuncionario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabProduto = new javax.swing.JTable();
         btFinalizar = new javax.swing.JButton();
+        btDeletar = new javax.swing.JButton();
+        btProdutos = new javax.swing.JButton();
+        btLimpar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -114,6 +117,30 @@ public class MenuFuncionario extends javax.swing.JFrame {
             }
         });
 
+        btDeletar.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
+        btDeletar.setText("DELETAR");
+        btDeletar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDeletarActionPerformed(evt);
+            }
+        });
+
+        btProdutos.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
+        btProdutos.setText("PRODUTOS");
+        btProdutos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btProdutosActionPerformed(evt);
+            }
+        });
+
+        btLimpar.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
+        btLimpar.setText("LIMPAR");
+        btLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btLimparActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,7 +156,10 @@ public class MenuFuncionario extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btAdicionar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btFinalizar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btFinalizar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btDeletar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btProdutos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btLimpar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -156,7 +186,13 @@ public class MenuFuncionario extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btAdicionar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btDeletar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btProdutos)
+                        .addGap(18, 18, 18)
+                        .addComponent(btLimpar)
+                        .addGap(18, 18, 18)
                         .addComponent(btFinalizar))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -182,11 +218,55 @@ public class MenuFuncionario extends javax.swing.JFrame {
     }//GEN-LAST:event_btFinalizarActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {
+    
     }
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        finalizar();
+
     }//GEN-LAST:event_formWindowClosing
+
+    private void btDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeletarActionPerformed
+        deletar();
+        mostrar();
+    }//GEN-LAST:event_btDeletarActionPerformed
+
+    private void btProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btProdutosActionPerformed
+        ProdutosExistentes.getProdutosExistentes().setVisible(true);
+    }//GEN-LAST:event_btProdutosActionPerformed
+
+    private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
+        limpar();
+        mostrar();
+    }//GEN-LAST:event_btLimparActionPerformed
+
+    public void limpar(){
+        try (Connection conexao = new Conexao().getConnection()) {
+            String query = "TRUNCATE TABLE compra;";
+            PreparedStatement statement = conexao.prepareStatement(query);
+            statement.executeUpdate();
+            conexao.close();
+            bxTotal.setText("");
+        } catch (SQLException e) {
+            System.out.println("ERRO NO SQL! - finalizar");
+        }
+    }
+    
+    public void deletar() {
+        int selectedRow = tabProduto.getSelectedRow();
+        if (selectedRow != -1) {
+            DefaultTableModel model = (DefaultTableModel) tabProduto.getModel();
+            String codigo = model.getValueAt(selectedRow, 0).toString();
+            model.removeRow(selectedRow);
+            try (Connection conexao = new Conexao().getConnection()) {
+                String sql = String.format("DELETE FROM compra WHERE id_produto = %s", codigo);
+                PreparedStatement stmt = conexao.prepareStatement(sql);
+                stmt.executeUpdate();
+                stmt.close();
+            } catch (SQLException e) {
+                System.out.println("ERRO NO SQL! - deletar");
+            }
+        }
+    }
 
     public void adicionar() {
         try (Connection conexao = new Conexao().getConnection()) {
@@ -197,7 +277,7 @@ public class MenuFuncionario extends javax.swing.JFrame {
             bxCodigo.setText("");
             bxQuantidade.setText("");
         } catch (SQLException e) {
-            System.out.println("ERRO NO SQL! - adiconar");
+            System.out.println("ERRO NO SQL! - adicionar");
         }
     }
 
@@ -241,8 +321,6 @@ public class MenuFuncionario extends javax.swing.JFrame {
                 int quantidade = resultSet.getInt("quantidade");
                 document.open();
                 document.add(new Paragraph(id + " - " + nome + " - " + valor + " - " + quantidade));
-                
-                System.out.println("Arquivo PDF criado com sucesso.");
             }
             document.close();
         } catch (SQLException e) {
@@ -269,7 +347,10 @@ public class MenuFuncionario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAdicionar;
+    private javax.swing.JButton btDeletar;
     private javax.swing.JButton btFinalizar;
+    private javax.swing.JButton btLimpar;
+    private javax.swing.JButton btProdutos;
     private javax.swing.JTextField bxCodigo;
     private javax.swing.JTextField bxQuantidade;
     private javax.swing.JTextField bxTotal;
